@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 
 //Components
 import WorkoutDetails from '../components/WorkoutDetails'
+import WorkoutForm from '../components/WorkoutForm'
 
 const Home = () => {
 
@@ -10,11 +10,11 @@ const Home = () => {
 
     useEffect(() => {
         const fetchWorkouts = async() => {
-            try {
-                const response = await axios.get('/api/workouts')
-                setWorkouts(response.data)
-            } catch (error) {
-                console.log('unable to fetch')
+            const response = await fetch('/api/workouts')
+            const json = await response.json()
+
+            if(response.ok) {
+                setWorkouts(json)
             }
         }
 
@@ -26,7 +26,9 @@ const Home = () => {
         return(
             <WorkoutDetails key={workout._id} workout={workout}/>
         )
-    })}</div>
+        })}
+        <WorkoutForm/>
+    </div>
   )
 }
 
