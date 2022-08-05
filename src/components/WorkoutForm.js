@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
+import { useWorkoutsContext } from '../hooks/useWorkoutsContext'
+import { ToastContainer, toast } from 'react-toastify';
 
 const WorkoutForm = () => {
 
+    const {dispatch} = useWorkoutsContext()
     const [title, setTitle] = useState('')
     const [load, setLoad] = useState('')
     const [reps, setReps] = useState('')
-    const [error, setError] = useState(null)
 
     const handleSubmit = async(e) => {
         e.preventDefault()
@@ -23,14 +25,30 @@ const WorkoutForm = () => {
         const json = await response.json()
 
         if(!response.ok) {
-            setError(json.error)
+            toast.error(json.error, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            })
         }
         if(response.ok) {
             setTitle('')
             setLoad('')
             setReps('')
-            setError(null)
-            console.log('new workout added', json)
+            dispatch({type: 'CREATE_WORKOUT', payload: json})
+            toast.success('Success :)', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         }
     }
 
@@ -48,7 +66,17 @@ const WorkoutForm = () => {
         <input type="number" id='reps' value={reps}  onChange={e => setReps(e.target.value)}/>
 
         <button>Add Workout</button>
-        {error && <div className='error'>{error}</div>}
+        <ToastContainer
+            position="top-right"
+            autoClose={2000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+        />
     </form>
   )
 }
