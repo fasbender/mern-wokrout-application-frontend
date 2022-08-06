@@ -8,6 +8,7 @@ const WorkoutForm = () => {
     const [title, setTitle] = useState('')
     const [load, setLoad] = useState('')
     const [reps, setReps] = useState('')
+    const [emptyFields, setEmptyFields] = useState([])
 
     const handleSubmit = async(e) => {
         e.preventDefault()
@@ -25,6 +26,8 @@ const WorkoutForm = () => {
         const json = await response.json()
 
         if(!response.ok) {
+            setEmptyFields(json.emptyFields)
+
             toast.error(json.error, {
                 position: "top-right",
                 autoClose: 5000,
@@ -40,6 +43,8 @@ const WorkoutForm = () => {
             setLoad('')
             setReps('')
             dispatch({type: 'CREATE_WORKOUT', payload: json})
+            setEmptyFields(null)
+
             toast.success('Success :)', {
                 position: "top-right",
                 autoClose: 5000,
@@ -57,13 +62,13 @@ const WorkoutForm = () => {
         <h3>Add a new Workout</h3>
 
         <label htmlFor="exercise">Exercise Title:</label>
-        <input type="text" id='exercise' value={title}  onChange={e => setTitle(e.target.value)}/>
+        <input type="text" id='exercise' value={title}  onChange={e => setTitle(e.target.value)} className={emptyFields?.includes('title') ? 'error' : ''} />
 
         <label htmlFor="load">Load (in kg):</label>
-        <input type="number" id='load' value={load}  onChange={e => setLoad(e.target.value)}/>
+        <input type="number" id='load' value={load}  onChange={e => setLoad(e.target.value)} className={emptyFields?.includes('load') ? 'error' : ''} />
 
         <label htmlFor="reps">Reps:</label>
-        <input type="number" id='reps' value={reps}  onChange={e => setReps(e.target.value)}/>
+        <input type="number" id='reps' value={reps}  onChange={e => setReps(e.target.value)} className={emptyFields?.includes('reps') ? 'error' : ''} />
 
         <button>Add Workout</button>
         <ToastContainer

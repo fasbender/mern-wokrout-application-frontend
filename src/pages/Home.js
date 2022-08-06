@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react'
 
 //Components
@@ -21,7 +20,7 @@ const Home = () => {
         }
 
         fetchWorkouts()
-    }, [])
+    }, [dispatch])
 
   return (
     <div>{workouts && workouts.map(workout => {
