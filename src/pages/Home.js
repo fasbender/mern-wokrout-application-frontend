@@ -23,12 +23,13 @@ const Home = () => {
     }, [dispatch])
 
   return (
-    <div>{workouts && workouts.map(workout => {
-        return(
-            <WorkoutDetails key={workout._id} workout={workout} />
-        )
-        })}
-        <WorkoutForm/>
+    <div className="home">
+      <div className="workouts">
+        {workouts && workouts.map(workout => (
+          <WorkoutDetails workout={workout} key={workout._id} />
+        ))}
+      </div>
+      <WorkoutForm />
     </div>
   )
 }
